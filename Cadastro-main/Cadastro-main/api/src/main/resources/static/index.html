@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulário de Cadastro</title>
+  <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .form-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .form-group button {
+            background-color: #5cb85c;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .form-group button:hover {
+            background-color: #4cae4c;
+        }
+    </style>
+</head>
+<body>
+<div class="form-container">
+  <form id="registrationForm">
+    <div class="form-group">
+      <label for="name">Nome:</label>
+      <input type="text" id="name" name="nome" required>
+    </div>
+    <div class="form-group">
+      <label for="email">E-mail:</label>
+      <input type="email" id="email" name="email" required>
+    </div>
+    <div class="form-group">
+      <label for="crm">CRM:</label>
+      <input type="text" id="crm" name="crm" required>
+    </div>
+    <div class="form-group">
+      <label for="phone">Telefone:</label>
+      <input type="tel" id="phone" name="telefone" required>
+    </div>
+    <div class="form-group">
+      <label for="especialidade">Especialidade:</label>
+      <select id="especialidade" name="especialidade" required>
+        <option value="">Selecione uma especialidade</option>
+        <option value="CARDIOLGIA">CARDIOLGIA</option>
+        <option value="DERMATOLOGIA">DERMATOLOGIA</option>
+        <option value="ORTOPEDIA">ORTOPEDIA</option>
+        <option value="GINECOLOGIA">GINECOLOGIA</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <button type="submit">Enviar</button>
+    </div>
+  </form>
+  <div id="message" style="display:none; margin-top: 20px;"></div>
+</div>
+<script>
+        document.getElementById('registrationForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            document.getElementById('message').innerText = 'Enviado!';
+            document.getElementById('message').style.display = 'block';
+            setTimeout(function() {
+                location.href = 'index.html'; // Redirecionar para a tela inicial
+            }, 100000); // Espera 2 segundos antes de redirecionar
+        });
+    </script>
+<script>
+        document.getElementById('registrationForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Obter os dados do formulário
+            const formData = new FormData(this);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            // Enviar os dados via Fetch para a API
+            fetch('http://localhost:8080/medicos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('message').innerText = data.message || 'Enviado com sucesso!';
+                document.getElementById('message').style.display = 'block';
+                setTimeout(function() {
+                    location.href = 'index.html'; // Redirecionar após 2 segundos
+                }, 20000);
+            })
+
+        });
+    </script>
+</body>
+</html>
